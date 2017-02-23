@@ -87,8 +87,8 @@ if __name__ == '__main__':
             blue(strip)
             glow(strip)
             time.sleep(0.75)
-        except IOError:
-            print IOError
+        except IOError as e:
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)
             traceback.print_exc()
     # finally:
     #     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
