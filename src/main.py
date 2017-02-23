@@ -54,12 +54,12 @@ def glow(strip, wait_ms, shouldHalt):
             return
 
     for i in range(70, LED_BRIGHTNESS + 1):
-        haltIfNeeded
+        haltIfNeeded()
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
     for i in range(LED_BRIGHTNESS, 70 - 1, -1):
-        haltIfNeeded
+        haltIfNeeded()
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
