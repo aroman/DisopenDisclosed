@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+import traceback
 from neopixel import *
 # All praise be to this guy https://github.com/shaunmulligan/resin-keyboard-example
 import termios, fcntl, sys, os
@@ -64,11 +65,16 @@ if __name__ == '__main__':
 
     # try:
     while 1:
-        blue(strip)
-        c = sys.stdin.read(1)
-        if c != '\n': continue
-        rainbow(strip)
-        time.sleep(0.75)
+        try:
+            blue(strip)
+            c = sys.stdin.read(1)
+            if c != '\n': continue
+            rainbow(strip)
+            time.sleep(0.75)
+        except IOError:
+            traceback.print_exc()
+        finally:
+            traceback.print_exc()
     # finally:
     #     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
     #     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
