@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import thread
 import time
-import traceback
 from neopixel import *
 # All praise be to this guy https://github.com/shaunmulligan/resin-keyboard-example
 import termios, fcntl, sys, os
@@ -47,16 +47,35 @@ def green(strip):
 #         strip.show()
 #         time.sleep(wait_ms/1000.0)
 
-def glow(strip, wait_ms=20):
+def glow(strip, wait_ms, didStateChange):
     print "glowing"
     for i in range(70, LED_BRIGHTNESS + 1):
+        if didStateChange(): return
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
     for i in range(LED_BRIGHTNESS, 70 - 1, -1):
+        if didStateChange(): return
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
+
+def waitForNewline(callback):
+    print "⌨️"
+    try:
+        while 1:
+            try:
+                c = sys.stdin.read(1)
+                if c == '\n':
+                    callback()
+            except IOError: pass
+    finally:
+        termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+        fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+
+class State:
+    WAIT_FOR_CARD = 1
+    WAIT_FOR_KEYS = 2
 
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
@@ -72,22 +91,22 @@ if __name__ == '__main__':
     oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
+    state = State.WAIT_FOR_CARD
+
     print "🌈"
 
-    try:
-        while 1:
-            try:
-                print "inner try"
-                blue(strip)
-                # glow(strip)
-                c = sys.stdin.read(1)
-                if c != '\n': continue
-                green(strip)
-                time.sleep(0.75)
-                blue(strip)
-                glow(strip)
-                time.sleep(0.75)
-            except IOError: pass
-    finally:
-        termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
-        fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+    def callback():
+        state = State.WAIT_FOR_KEYS
+        green(strip)
+        time.sleep(0.75)
+
+    thread.start_new_thread(waitForNewline, (callback,))
+
+    while True:
+        print "glowing blue"
+        if state == State.WAIT_FOR_CARD:
+            blue(strip)
+            glow(strip, 20, lambda _: state != State.WAIT_FOR_CARD)
+        elif state == State.WAIT_FOR_KEYS:
+            green(strip)
+            glow(strip, 20, lambda _: state != State.WAIT_FOR_KEYS)
