@@ -2,7 +2,6 @@
 
 import thread
 import time
-from pirc522 import RFID
 from neopixel import *
 import sys
 
@@ -22,30 +21,11 @@ def setAllColor(strip, color, wait_ms=50):
     strip.show()
     # time.sleep(wait_ms/1000.0)
 
-# def wheel(pos):
-#     """Generate rainbow colors across 0-255 positions."""
-#     if pos < 85:
-#     return Color(pos * 3, 255 - pos * 3, 0)
-#     elif pos < 170:
-#     pos -= 85
-#     return Color(255 - pos * 3, 0, pos * 3)
-#     else:
-#     pos -= 170
-#     return Color(0, pos * 3, 255 - pos * 3)
-
 def blue(strip):
     setAllColor(strip, Color(173, 232, 247))
 
 def green(strip):
     setAllColor(strip, Color(96, 255, 99))
-
-# def rainbow(strip, wait_ms=20):
-#     """Draw rainbow that fades across all pixels at once."""
-#     for j in range(256):
-#         for i in range(strip.numPixels()):
-#             strip.setPixelColor(i, wheel((i+j) & 255))
-#         strip.show()
-#         time.sleep(wait_ms/1000.0)
 
 def glow(strip, wait_ms, shouldHalt):
     for i in range(70, LED_BRIGHTNESS + 1):
@@ -74,21 +54,10 @@ class State:
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     strip.begin()
-    rdr = RFID()
-    util = rdr.util()
-    # Set util debug to true - it will print what's going on
-    util.debug = True
 
     state = State.WAIT_FOR_CARD
 
     print "🌈"
-
-    while True:
-        (error, tag_type) = rdr.request()
-        if error: print tag_type
-        if not error:
-            print "tag detected"
-
 
     def onCardRead():
         global state
