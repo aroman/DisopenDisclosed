@@ -88,10 +88,7 @@ if __name__ == '__main__':
             glow(strip)
             time.sleep(0.75)
         except IOError:
-            print "IOERROR"
-            traceback.print_exc()
-        finally:
-            print "FINALLY"
+            print IOError
             traceback.print_exc()
     # finally:
     #     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
