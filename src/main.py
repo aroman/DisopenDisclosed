@@ -47,7 +47,7 @@ def green(strip):
 #         time.sleep(wait_ms/1000.0)
 
 def glow(strip, wait_ms, shouldHalt):
-    
+
     def haltIfNeeded():
         if shouldHalt():
             print "shoudlHalt() == True!"
@@ -85,10 +85,12 @@ if __name__ == '__main__':
     print "🌈"
 
     def onCardRead():
+        global state
         state = State.WAIT_FOR_KEYS
         print "Updating state to: " + state
 
     def haltWhenStateBecomes(targetState):
+        global state
         return lambda: state == targetState
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
