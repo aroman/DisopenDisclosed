@@ -1,3 +1,4 @@
+import time
 from neopixel import *
 # All praise be to this guy https://github.com/shaunmulligan/resin-keyboard-example
 import termios, fcntl, sys, os
