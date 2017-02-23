@@ -49,12 +49,12 @@ def green(strip):
 def glow(strip, wait_ms, didStateChange):
     print "glowing"
     for i in range(70, LED_BRIGHTNESS + 1):
-        if didStateChange(): return
+        if didStateChange(1): return
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
     for i in range(LED_BRIGHTNESS, 70 - 1, -1):
-        if didStateChange(): return
+        if didStateChange(1): return
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
@@ -90,9 +90,9 @@ if __name__ == '__main__':
         if state == State.WAIT_FOR_CARD:
             print "state is WAIT_FOR_CARD"
             blue(strip)
-            glow(strip, 20, lambda _: state != State.WAIT_FOR_CARD)
+            glow(strip, 20, lambda: state != State.WAIT_FOR_CARD)
         elif state == State.WAIT_FOR_KEYS:
             print "state is WAIT_FOR_KEYS"
             green(strip)
-            glow(strip, 20, lambda _: state != State.WAIT_FOR_KEYS)
+            glow(strip, 20, lambda: state != State.WAIT_FOR_KEYS)
             state = State.WAIT_FOR_CARD
