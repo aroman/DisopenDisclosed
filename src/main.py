@@ -135,20 +135,33 @@ if __name__ == '__main__':
         global state
         state = State.WAIT_FOR_CARD
 
+    waitForNewlineThreadStarted = False
+    waitForButtonThreadStarted = False
+    waitForResetThreadStarted = False
+
     while True:
         print state
         if state == State.WAIT_FOR_CARD:
-            thread.start_new_thread(waitForNewline, (onCardRead,))
+            if not waitForNewlineThreadStarted:
+                thread.start_new_thread(waitForNewline, (onCardRead,))
+                waitForNewlineThreadStarted = True
+            waitForResetThreadStarted = False
             blueTopOnly(strip)
             glow(strip, 10, haltOnKeyRead)
             print state
         elif state == State.WAIT_FOR_KEYS:
-            thread.start_new_thread(waitForButton, (onButtonPressed,))
+            if not waitForButtonThreadStarted:
+                thread.start_new_thread(waitForButton, (onButtonPressed,))
+                waitForButtonThreadStarted = True
+            waitForNewlineThreadStarted = False
             greenBottomOnly(strip)
             glow(strip, 10, haltOnButtonPressed)
             print state
         elif state == State.WAIT_FOR_NOCARD:
             greenTopOnly(strip)
-            thread.start_new_thread(resetAfterDelay, ())
+            if not waitForResetThreadStarted:
+                thread.start_new_thread(resetAfterDelay, ())
+                waitForResetThreadStarted = True
+            waitForButtonThreadStarted = False
             glow(strip, 10, haltOnReset)
             print state
