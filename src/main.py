@@ -85,6 +85,7 @@ def waitForButton(onButtonPressed):
             onButtonPressed()
             time.sleep(0.3)
             return
+        time.sleep(0.01)
 
 class State:
     WAIT_FOR_CARD = 'WAIT_FOR_CARD'
