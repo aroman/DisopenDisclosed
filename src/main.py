@@ -49,7 +49,7 @@ def green(strip):
 
 def glow(strip, wait_ms=20):
     for i in range(LED_BRIGHTNESS/15, LED_BRIGHTNESS):
-        setBrightness(i)
+        strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
 
