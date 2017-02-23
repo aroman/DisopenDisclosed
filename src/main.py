@@ -45,6 +45,10 @@ def blueTopOnly(strip):
     setTopColor(strip, BlueColor)
     setBottomColor(strip, OffColor)
 
+def greenTopOnly(strip):
+    setTopColor(strip, GreenColor)
+    setBottomColor(strip, OffColor)
+
 def greenBottomOnly(strip):
     setTopColor(strip, OffColor)
     setBottomColor(strip, GreenColor)
@@ -80,6 +84,7 @@ def waitForButton(onButtonPressed):
 class State:
     WAIT_FOR_CARD = 'WAIT_FOR_CARD'
     WAIT_FOR_KEYS = 'WAIT_FOR_KEYS'
+    WAIT_FOR_NOCARD = 'WAIT_FOR_NOCARD'
 
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
@@ -97,11 +102,21 @@ if __name__ == '__main__':
 
     def onButtonPressed():
         global state
-        print "CALLBACK FOR BUTTON"
+        state = State.WAIT_FOR_NOCARD
+        print "Updating state to: " + state
 
     def haltOnKeyRead():
         global state
         return state == State.WAIT_FOR_KEYS
+
+    def haltOnButtonPressed():
+        global state
+        return state == State.WAIT_FOR_NOCARD
+
+    def resetAfterDelay():
+        time.sleep(5)
+        global state
+        return state == State.WAIT_FOR_NOCARD
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
     thread.start_new_thread(waitForButton, (onButtonPressed,))
@@ -113,6 +128,10 @@ if __name__ == '__main__':
             glow(strip, 20, haltOnKeyRead)
         elif state == State.WAIT_FOR_KEYS:
             greenBottomOnly(strip)
-            # glow(strip, 20, haltOnKeyRead)
-            # state = State.WAIT_FOR_CARD
+            state = State.WAIT_FOR_CARD
+            glow(strip, 20, haltOnButtonPressed)
             time.sleep(3)
+        elif state == State.WAIT_FOR_NOCARD:
+            greenTopOnly(strip)
+            glow(strip, 20, lambda: pass)
+            thread.start_new_thread(resetAfterDelay, ())
