@@ -6,7 +6,7 @@ from neopixel import *
 import termios, fcntl, sys, os
 
 # LED strip configuration:
-LED_COUNT      = (4 + 2 + 3 + 2 + 4)      # Number of LED pixels.
+LED_COUNT      = (4 + 2 + 3 + 2 )      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
@@ -20,6 +20,17 @@ def setAllColor(strip, color, wait_ms=50):
         strip.setPixelColor(i, color)
     strip.show()
     # time.sleep(wait_ms/1000.0)
+
+def wheel(pos):
+	"""Generate rainbow colors across 0-255 positions."""
+	if pos < 85:
+		return Color(pos * 3, 255 - pos * 3, 0)
+	elif pos < 170:
+		pos -= 85
+		return Color(255 - pos * 3, 0, pos * 3)
+	else:
+		pos -= 170
+		return Color(0, pos * 3, 255 - pos * 3)
 
 def blue(strip):
     setAllColor(strip, Color(178, 235, 255))
@@ -53,13 +64,11 @@ if __name__ == '__main__':
 
     # try:
     while 1:
-        try:
-            blue(strip)
-            c = sys.stdin.read(1)
-            if c != '\n': continue
-            rainbow(strip)
-            time.sleep(0.75)
-        except IOError: pass
+        blue(strip)
+        c = sys.stdin.read(1)
+        if c != '\n': continue
+        rainbow(strip)
+        time.sleep(0.75)
     # finally:
     #     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
     #     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
