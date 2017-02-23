@@ -1,4 +1,6 @@
-from neopixel import *
+# from neopixel import *
+# All praise be to this guy https://github.com/shaunmulligan/resin-keyboard-example
+import termios, fcntl, sys, os
 
 # LED strip configuration:
 LED_COUNT      = 150      # Number of LED pixels.
@@ -20,10 +22,29 @@ def blue():
     setAllColor(strip, Color(178, 235, 255))
 
 if __name__ == '__main__':
-    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-    strip.begin()
-    while True:
-        blue()
-        input = raw_input("THE NUMBER OF THE BEAST: ")
-        setAllColor(strip, Color(0, 0, 0))
-        time.sleep(0.25)
+    # strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
+    # strip.begin()
+
+    fd = sys.stdin.fileno()
+
+    oldterm = termios.tcgetattr(fd)
+    newattr = termios.tcgetattr(fd)
+    newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
+    termios.tcsetattr(fd, termios.TCSANOW, newattr)
+
+    oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
+    fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
+
+
+    try:
+        while 1:
+            try:
+                c = sys.stdin.read(1)
+                if c != '\n': continue
+                blue()
+                setAllColor(strip, Color(0, 0, 0))
+                time.sleep(0.25)
+            except IOError: pass
+    finally:
+        termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+        fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
