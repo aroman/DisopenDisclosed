@@ -93,7 +93,7 @@ if __name__ == '__main__':
     def haltOnKeyRead():
         global state
         print "checking state, it's " + state
-        return state == targetState
+        return state == State.WAIT_FOR_KEYS
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
 
