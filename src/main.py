@@ -74,22 +74,20 @@ if __name__ == '__main__':
 
     print "🌈"
 
-    # try:
-    while 1:
-        try:
-            print "inner try"
-            blue(strip)
-            glow(strip)
-            c = sys.stdin.read(1)
-            if c != '\n': continue
-            green(strip)
-            time.sleep(0.75)
-            blue(strip)
-            glow(strip)
-            time.sleep(0.75)
-        except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror)
-            traceback.print_exc()
-    # finally:
-    #     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
-    #     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+    try:
+        while 1:
+            try:
+                print "inner try"
+                blue(strip)
+                glow(strip)
+                c = sys.stdin.read(1)
+                if c != '\n': continue
+                green(strip)
+                time.sleep(0.75)
+                blue(strip)
+                glow(strip)
+                time.sleep(0.75)
+            except IOError: pass
+    finally:
+        termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+        fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
