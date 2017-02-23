@@ -25,6 +25,14 @@ def blue():
 def green():
     setAllColor(strip, Color(96, 255, 99))
 
+def rainbow(strip, wait_ms=20, iterations=1):
+	"""Draw rainbow that fades across all pixels at once."""
+	for j in range(256*iterations):
+		for i in range(strip.numPixels()):
+			strip.setPixelColor(i, wheel((i+j) & 255))
+		strip.show()
+		time.sleep(wait_ms/1000.0)
+
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     strip.begin()
@@ -46,7 +54,7 @@ if __name__ == '__main__':
                 blue()
                 c = sys.stdin.read(1)
                 if c != '\n': continue
-                green()
+                rainbow(strip)
                 time.sleep(0.75)
             except IOError: pass
     finally:
