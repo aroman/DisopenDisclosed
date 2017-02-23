@@ -16,13 +16,14 @@ def setAllColor(strip, color, wait_ms=50):
     strip.show()
     # time.sleep(wait_ms/1000.0)
 
-def alert():
-    setAllColor(strip, Color(255, 0, 0))
-    return 'done'
+def blue():
+    setAllColor(strip, Color(178, 235, 255))
 
 if __name__ == '__main__':
-    # Create NeoPixel object with appropriate configuration.
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-    # Intialize the library (must be called once before other functions).
     strip.begin()
-    setAllColor(strip, Color(178, 235, 255))
+    while True:
+        blue()
+        input = raw_input("THE NUMBER OF THE BEAST: ")
+        setAllColor(strip, Color(0, 0, 0))
+        time.sleep(0.25)
