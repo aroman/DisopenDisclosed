@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import time
 from neopixel import *
 # All praise be to this guy https://github.com/shaunmulligan/resin-keyboard-example
@@ -47,6 +49,7 @@ if __name__ == '__main__':
     oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
+    print "🌈"
 
     try:
         while 1:
