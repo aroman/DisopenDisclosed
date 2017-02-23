@@ -7,7 +7,7 @@ from neopixel import *
 import termios, fcntl, sys, os
 
 # LED strip configuration:
-LED_COUNT      = (4 + 2 + 3 + 2 )      # Number of LED pixels.
+LED_COUNT      = (4 + 2 + 3 + 2 + 4 + 4 + 4)      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
@@ -22,30 +22,36 @@ def setAllColor(strip, color, wait_ms=50):
     strip.show()
     # time.sleep(wait_ms/1000.0)
 
-def wheel(pos):
-	"""Generate rainbow colors across 0-255 positions."""
-	if pos < 85:
-		return Color(pos * 3, 255 - pos * 3, 0)
-	elif pos < 170:
-		pos -= 85
-		return Color(255 - pos * 3, 0, pos * 3)
-	else:
-		pos -= 170
-		return Color(0, pos * 3, 255 - pos * 3)
+# def wheel(pos):
+#     """Generate rainbow colors across 0-255 positions."""
+#     if pos < 85:
+#     return Color(pos * 3, 255 - pos * 3, 0)
+#     elif pos < 170:
+#     pos -= 85
+#     return Color(255 - pos * 3, 0, pos * 3)
+#     else:
+#     pos -= 170
+#     return Color(0, pos * 3, 255 - pos * 3)
 
 def blue(strip):
-    setAllColor(strip, Color(178, 235, 255))
+    setAllColor(strip, Color(84, 134, 249))
 
 def green(strip):
     setAllColor(strip, Color(96, 255, 99))
 
-def rainbow(strip, wait_ms=20, iterations=1):
-	"""Draw rainbow that fades across all pixels at once."""
-	for j in range(256*iterations):
-		for i in range(strip.numPixels()):
-			strip.setPixelColor(i, wheel((i+j) & 255))
-		strip.show()
-		time.sleep(wait_ms/1000.0)
+# def rainbow(strip, wait_ms=20):
+#     """Draw rainbow that fades across all pixels at once."""
+#     for j in range(256):
+#         for i in range(strip.numPixels()):
+#             strip.setPixelColor(i, wheel((i+j) & 255))
+#         strip.show()
+#         time.sleep(wait_ms/1000.0)
+
+def glow(strip, wait_ms=20):
+        for i in range(20, 200):
+            setBrightness(i)
+            time.sleep(wait_ms/1000.0)
+            strip.show()
 
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
@@ -69,7 +75,8 @@ if __name__ == '__main__':
             blue(strip)
             c = sys.stdin.read(1)
             if c != '\n': continue
-            rainbow(strip)
+            # rainbow(strip)
+            green(strip)
             time.sleep(0.75)
         except IOError:
             traceback.print_exc()
