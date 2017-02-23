@@ -131,7 +131,6 @@ if __name__ == '__main__':
         elif state == State.WAIT_FOR_KEYS:
             greenBottomOnly(strip)
             glow(strip, 20, haltOnButtonPressed)
-            time.sleep(3)
             print state
         elif state == State.WAIT_FOR_NOCARD:
             greenTopOnly(strip)
