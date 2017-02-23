@@ -53,7 +53,7 @@ def greenBottomOnly(strip):
     setTopColor(strip, OffColor)
     setBottomColor(strip, GreenColor)
 
-def greenBottomOnly(strip):
+def blueBottomOnly(strip):
     setTopColor(strip, OffColor)
     setBottomColor(strip, BlueColor)
 
