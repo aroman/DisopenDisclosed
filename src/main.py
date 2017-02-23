@@ -34,7 +34,7 @@ def setAllColor(strip, color, wait_ms=50):
 #     return Color(0, pos * 3, 255 - pos * 3)
 
 def blue(strip):
-    setAllColor(strip, Color(94, 175, 249))
+    setAllColor(strip, Color(140, 232, 255))
 
 def green(strip):
     setAllColor(strip, Color(96, 255, 99))
