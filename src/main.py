@@ -49,11 +49,11 @@ def green(strip):
 
 def glow(strip, wait_ms=20):
     print "glowing"
-    for i in range(50, LED_BRIGHTNESS + 1):
+    for i in range(70, LED_BRIGHTNESS + 1):
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
-    for i in range(LED_BRIGHTNESS, 50 - 1, -1):
+    for i in range(LED_BRIGHTNESS, 70 - 1, -1):
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
@@ -88,8 +88,10 @@ if __name__ == '__main__':
             glow(strip)
             time.sleep(0.75)
         except IOError:
+            print "IOERROR"
             traceback.print_exc()
         finally:
+            print "FINALLY"
             traceback.print_exc()
     # finally:
     #     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
