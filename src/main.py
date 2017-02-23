@@ -15,7 +15,6 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 
 
 TOP_PIXELS = 4 + 2 + 3 + 2
-BOTTOM_PIXELS = LED_COUNT - TOP_PIXELS
 
 BlueColor = Color(173, 232, 247)
 GreenColor = Color(96, 255, 99)
@@ -33,7 +32,7 @@ def setTopColor(strip, color, wait_ms=50):
     strip.show()
 
 def setBottomColor(strip, color):
-    for i in range(TOP_PIXELS, BOTTOM_PIXELS):
+    for i in range(TOP_PIXELS, LED_COUNT):
         strip.setPixelColor(i, color)
     strip.show()
 
