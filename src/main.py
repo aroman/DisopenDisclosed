@@ -54,6 +54,7 @@ def greenBottomOnly(strip):
     setBottomColor(strip, GreenColor)
 
 def glow(strip, wait_ms, shouldHalt):
+    print "glow()"
     for i in range(70, LED_BRIGHTNESS + 1):
         if shouldHalt(): return
         strip.setBrightness(i)
@@ -119,6 +120,7 @@ if __name__ == '__main__':
         return state == State.WAIT_FOR_CARD
 
     def resetAfterDelay():
+        print "resetAfterDelay"
         time.sleep(5)
         global state
         state = State.WAIT_FOR_CARD
