@@ -133,5 +133,5 @@ if __name__ == '__main__':
             time.sleep(3)
         elif state == State.WAIT_FOR_NOCARD:
             greenTopOnly(strip)
-            glow(strip, 20, lambda: pass)
+            glow(strip, 20, lambda: "")
             thread.start_new_thread(resetAfterDelay, ())
