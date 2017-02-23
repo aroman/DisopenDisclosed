@@ -2,6 +2,7 @@
 
 import thread
 import time
+from pirc522 import RFID
 from neopixel import *
 import sys
 
@@ -73,8 +74,15 @@ class State:
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     strip.begin()
+    rdr = RFID()
 
     state = State.WAIT_FOR_CARD
+
+    while True:
+        (error, tag_type) = rdr.request()
+        if error: print error
+        if not error:
+            print "tag detected"
 
     print "🌈"
 
@@ -86,7 +94,7 @@ if __name__ == '__main__':
 
     def haltOnKeyRead():
         global state
-        # print "checking state, it's " + state
+        print "checking state, it's " + state
         return state == State.WAIT_FOR_KEYS
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
