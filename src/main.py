@@ -1,4 +1,4 @@
-# from neopixel import *
+from neopixel import *
 # All praise be to this guy https://github.com/shaunmulligan/resin-keyboard-example
 import termios, fcntl, sys, os
 
@@ -22,8 +22,8 @@ def blue():
     setAllColor(strip, Color(178, 235, 255))
 
 if __name__ == '__main__':
-    # strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-    # strip.begin()
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
+    strip.begin()
 
     fd = sys.stdin.fileno()
 
