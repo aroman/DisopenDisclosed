@@ -49,12 +49,12 @@ def green(strip):
 def glow(strip, wait_ms, didStateChange):
     print "glowing"
     for i in range(70, LED_BRIGHTNESS + 1):
-        if didStateChange(1): return
+        if didStateChange(): return
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
     for i in range(LED_BRIGHTNESS, 70 - 1, -1):
-        if didStateChange(1): return
+        if didStateChange(): return
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
