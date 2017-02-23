@@ -75,16 +75,20 @@ if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     strip.begin()
     rdr = RFID()
+    util = rdr.util()
+    # Set util debug to true - it will print what's going on
+    util.debug = True
 
     state = State.WAIT_FOR_CARD
 
+    print "🌈"
+
     while True:
         (error, tag_type) = rdr.request()
-        if error: print error
+        if error: print tag_type
         if not error:
             print "tag detected"
 
-    print "🌈"
 
     def onCardRead():
         global state
