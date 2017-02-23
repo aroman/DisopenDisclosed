@@ -4,7 +4,7 @@ from neopixel import *
 import termios, fcntl, sys, os
 
 # LED strip configuration:
-LED_COUNT      = 150      # Number of LED pixels.
+LED_COUNT      = 6      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
@@ -40,10 +40,10 @@ if __name__ == '__main__':
     try:
         while 1:
             try:
+                blue()
                 c = sys.stdin.read(1)
                 if c != '\n': continue
-                blue()
-                setAllColor(strip, Color(0, 0, 0))
+                setAllColor(strip, Color(255, 0, 0))
                 time.sleep(0.25)
             except IOError: pass
     finally:
