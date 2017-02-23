@@ -1,3 +1,4 @@
 rpi-ws281x==2.0.3
 spidev==3.2
-pi-rc522==1.1.0
+RPi.GPIO==0.6.3
+git+git://github.com/ondryaso/pi-rc522@3763e23#egg=pi-rc522
