@@ -2,7 +2,7 @@
 
 import thread
 import time
-# from neopixel import *
+from neopixel import *
 import sys
 
 # LED strip configuration:
