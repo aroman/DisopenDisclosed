@@ -47,7 +47,6 @@ def green(strip):
 #         time.sleep(wait_ms/1000.0)
 
 def glow(strip, wait_ms, didStateChange):
-    print "glowing"
     for i in range(70, LED_BRIGHTNESS + 1):
         if didStateChange(): return
         strip.setBrightness(i)
@@ -68,8 +67,8 @@ def waitForNewline(onCardRead):
 
 
 class State:
-    WAIT_FOR_CARD = 1
-    WAIT_FOR_KEYS = 2
+    WAIT_FOR_CARD = 'WAIT_FOR_CARD'
+    WAIT_FOR_KEYS = 'WAIT_FOR_KEYS'
 
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
@@ -81,18 +80,20 @@ if __name__ == '__main__':
 
     def onCardRead():
         state = State.WAIT_FOR_KEYS
-        green(strip)
-        time.sleep(0.75)
+        print "Updating state to: " + state
+
+    def haltWhenStateBecomes(targetState):
+        return lambda: state == targetState
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
 
     while True:
         if state == State.WAIT_FOR_CARD:
-            print "state is WAIT_FOR_CARD"
+            print state
             blue(strip)
-            glow(strip, 20, lambda: state == State.WAIT_FOR_KEYS)
+            glow(strip, 20, haltWhenStateBecomes(State.WAIT_FOR_KEYS))
         elif state == State.WAIT_FOR_KEYS:
-            print "state is WAIT_FOR_KEYS"
+            print state
             green(strip)
             # glow(strip, 20, lambda: state == State.WAIT_FOR_CARD)
             state = State.WAIT_FOR_CARD
