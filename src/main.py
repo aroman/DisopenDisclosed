@@ -111,15 +111,22 @@ if __name__ == '__main__':
 
     def haltOnKeyRead():
         global state
-        return state == State.WAIT_FOR_KEYS
+        if state == State.WAIT_FOR_KEYS:
+            print "haltOnKeyRead() TRUE"
+            return
 
     def haltOnButtonPressed():
+        print "haltOnButtonPressed()"
         global state
-        return state == State.WAIT_FOR_NOCARD
+        if state == State.WAIT_FOR_NOCARD:
+            print "haltOnButtonPressed() TRUE"
+            return
 
     def haltOnReset():
         global state
-        return state == State.WAIT_FOR_CARD
+        if state == State.WAIT_FOR_CARD:
+            print "haltOnReset() TRUE"
+            return
 
     def resetAfterDelay():
         print "resetAfterDelay"
