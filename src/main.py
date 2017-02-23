@@ -96,13 +96,13 @@ if __name__ == '__main__':
 
     def onCardRead():
         global state
-        if state == WAIT_FOR_CARD:
+        if state == State.WAIT_FOR_CARD:
             state = State.WAIT_FOR_KEYS
             print "Updating state to: " + state
 
     def onButtonPressed():
         global state
-        if state == WAIT_FOR_KEYS:
+        if state == State.WAIT_FOR_KEYS:
             state = State.WAIT_FOR_NOCARD
             print "Updating state to: " + state
 
