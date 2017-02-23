@@ -2,9 +2,8 @@
 
 import thread
 import time
-from neopixel import *
-# All praise be to this guy https://github.com/shaunmulligan/resin-keyboard-example
-import termios, fcntl, sys, os
+# from neopixel import *
+import sys
 
 # LED strip configuration:
 LED_COUNT      = (4 + 2 + 3 + 2 + 4 + 4 + 4)      # Number of LED pixels.
@@ -62,16 +61,11 @@ def glow(strip, wait_ms, didStateChange):
 
 def waitForNewline(callback):
     print "⌨️"
-    try:
-        while 1:
-            try:
-                c = sys.stdin.read(1)
-                if c == '\n':
-                    callback()
-            except IOError: pass
-    finally:
-        termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
-        fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+    with open('/dev/tty0', 'r') as tty:
+        while True:
+            tty.readline()
+            callback()
+
 
 class State:
     WAIT_FOR_CARD = 1
@@ -80,16 +74,6 @@ class State:
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     strip.begin()
-
-    fd = sys.stdin.fileno()
-
-    oldterm = termios.tcgetattr(fd)
-    newattr = termios.tcgetattr(fd)
-    newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
-    termios.tcsetattr(fd, termios.TCSANOW, newattr)
-
-    oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
-    fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
     state = State.WAIT_FOR_CARD
 
@@ -103,10 +87,12 @@ if __name__ == '__main__':
     thread.start_new_thread(waitForNewline, (callback,))
 
     while True:
-        print "glowing blue"
         if state == State.WAIT_FOR_CARD:
+            print "state is WAIT_FOR_CARD"
             blue(strip)
             glow(strip, 20, lambda _: state != State.WAIT_FOR_CARD)
         elif state == State.WAIT_FOR_KEYS:
+            print "state is WAIT_FOR_KEYS"
             green(strip)
             glow(strip, 20, lambda _: state != State.WAIT_FOR_KEYS)
+            state = State.WAIT_FOR_CARD
