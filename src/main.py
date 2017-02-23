@@ -14,18 +14,36 @@ LED_BRIGHTNESS = 125     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 
 
-def setAllColor(strip, color, wait_ms=50):
-    """Wipe color across display a pixel at a time."""
-    for i in range(strip.numPixels()):
+TOP_PIXELS = 4 + 2 + 3 + 2
+BOTTOM_PIXELS = LED_COUNT - TOP_PIXELS
+
+BlueColor = Color(173, 232, 247)
+GreenColor = Color(96, 255, 99)
+OffColor = Color(0, 0, 0)
+
+# def setAllColor(strip, color, wait_ms=50):
+#     for i in range(strip.numPixels()):
+#         strip.setPixelColor(i, color)
+#     strip.show()
+#     # time.sleep(wait_ms/1000.0)
+
+def setTopColor(strip, color, wait_ms=50):
+    for i in range(TOP_PIXELS):
         strip.setPixelColor(i, color)
     strip.show()
-    # time.sleep(wait_ms/1000.0)
 
-def blue(strip):
-    setAllColor(strip, Color(173, 232, 247))
+def setBottomColor(strip, color, wait_ms=)
+    for i in range(TOP_PIXELS, BOTTOM_PIXELS):
+        strip.setPixelColor(i, color)
+    strip.show()
 
-def green(strip):
-    setAllColor(strip, Color(96, 255, 99))
+def blueTopOnly(strip):
+    setTopColor(strip, BlueColor)
+    setBottomColor(strip, OffColor)
+
+def greenBottomOnly(strip):
+    setTopColor(strip, OffColor)
+    setBottomColor(strip, GreenColor)
 
 def glow(strip, wait_ms, shouldHalt):
     for i in range(70, LED_BRIGHTNESS + 1):
@@ -46,7 +64,6 @@ def waitForNewline(onCardRead):
             tty.readline()
             onCardRead()
 
-
 class State:
     WAIT_FOR_CARD = 'WAIT_FOR_CARD'
     WAIT_FOR_KEYS = 'WAIT_FOR_KEYS'
@@ -59,6 +76,7 @@ if __name__ == '__main__':
 
     print "🌈"
 
+
     def onCardRead():
         global state
         state = State.WAIT_FOR_KEYS
@@ -67,7 +85,6 @@ if __name__ == '__main__':
 
     def haltOnKeyRead():
         global state
-        print "checking state, it's " + state
         return state == State.WAIT_FOR_KEYS
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
@@ -75,10 +92,10 @@ if __name__ == '__main__':
     while True:
         print state
         if state == State.WAIT_FOR_CARD:
-            blue(strip)
+            blueTopOnly(strip)
             glow(strip, 20, haltOnKeyRead)
         elif state == State.WAIT_FOR_KEYS:
-            green(strip)
-            # glow(strip, 20, lambda: state == State.WAIT_FOR_CARD)
+            greenBottomOnly(strip)
+            # glow(strip, 20, haltOnKeyRead)
             state = State.WAIT_FOR_CARD
             time.sleep(3)
