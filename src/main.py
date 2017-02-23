@@ -115,27 +115,25 @@ if __name__ == '__main__':
         global state
         if state == State.WAIT_FOR_KEYS:
             print "haltOnKeyRead() TRUE"
-            return
+            return True
 
     def haltOnButtonPressed():
-        print "haltOnButtonPressed()"
         global state
         if state == State.WAIT_FOR_NOCARD:
             print "haltOnButtonPressed() TRUE"
-            return
+            return True
 
     def haltOnReset():
         global state
         if state == State.WAIT_FOR_CARD:
             print "haltOnReset() TRUE"
-            return
+            return True
 
     def resetAfterDelay():
         print "resetAfterDelay"
         time.sleep(5)
         global state
         state = State.WAIT_FOR_CARD
-
 
     while True:
         print state
