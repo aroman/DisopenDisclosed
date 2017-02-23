@@ -6,7 +6,7 @@ from neopixel import *
 import termios, fcntl, sys, os
 
 # LED strip configuration:
-LED_COUNT      = 11      # Number of LED pixels.
+LED_COUNT      = (4 + 2 + 3 + 2 + 4)      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
@@ -21,10 +21,10 @@ def setAllColor(strip, color, wait_ms=50):
     strip.show()
     # time.sleep(wait_ms/1000.0)
 
-def blue():
+def blue(strip):
     setAllColor(strip, Color(178, 235, 255))
 
-def green():
+def green(strip):
     setAllColor(strip, Color(96, 255, 99))
 
 def rainbow(strip, wait_ms=20, iterations=1):
@@ -51,15 +51,15 @@ if __name__ == '__main__':
 
     print "🌈"
 
-    try:
-        while 1:
-            try:
-                blue()
-                c = sys.stdin.read(1)
-                if c != '\n': continue
-                rainbow(strip)
-                time.sleep(0.75)
-            except IOError: pass
-    finally:
-        termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
-        fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+    # try:
+    while 1:
+        try:
+            blue(strip)
+            c = sys.stdin.read(1)
+            if c != '\n': continue
+            rainbow(strip)
+            time.sleep(0.75)
+        except IOError: pass
+    # finally:
+    #     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+    #     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
