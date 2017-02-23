@@ -74,6 +74,7 @@ def waitForNewline(onCardRead):
         while True:
             tty.readline()
             onCardRead()
+            return
 
 def waitForButton(onButtonPressed):
     print "🔘"
@@ -83,6 +84,7 @@ def waitForButton(onButtonPressed):
             print('Button Pressed')
             onButtonPressed()
             time.sleep(0.3)
+            return
 
 class State:
     WAIT_FOR_CARD = 'WAIT_FOR_CARD'
@@ -134,16 +136,16 @@ if __name__ == '__main__':
         global state
         state = State.WAIT_FOR_CARD
 
-    thread.start_new_thread(waitForNewline, (onCardRead,))
-    thread.start_new_thread(waitForButton, (onButtonPressed,))
 
     while True:
         print state
         if state == State.WAIT_FOR_CARD:
+            thread.start_new_thread(waitForNewline, (onCardRead,))
             blueTopOnly(strip)
             glow(strip, 20, haltOnKeyRead)
             print state
         elif state == State.WAIT_FOR_KEYS:
+            thread.start_new_thread(waitForButton, (onButtonPressed,))
             greenBottomOnly(strip)
             glow(strip, 20, haltOnButtonPressed)
             print state
