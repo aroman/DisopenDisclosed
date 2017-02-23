@@ -142,15 +142,15 @@ if __name__ == '__main__':
         if state == State.WAIT_FOR_CARD:
             thread.start_new_thread(waitForNewline, (onCardRead,))
             blueTopOnly(strip)
-            glow(strip, 20, haltOnKeyRead)
+            glow(strip, 10, haltOnKeyRead)
             print state
         elif state == State.WAIT_FOR_KEYS:
             thread.start_new_thread(waitForButton, (onButtonPressed,))
             greenBottomOnly(strip)
-            glow(strip, 20, haltOnButtonPressed)
+            glow(strip, 10, haltOnButtonPressed)
             print state
         elif state == State.WAIT_FOR_NOCARD:
             greenTopOnly(strip)
             thread.start_new_thread(resetAfterDelay, ())
-            glow(strip, 20, haltOnReset)
+            glow(strip, 10, haltOnReset)
             print state
