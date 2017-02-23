@@ -15,7 +15,7 @@ LED_COUNT      = (4 + 2 + 3 + 2 + 4 + 4 + 4)      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
-LED_BRIGHTNESS = 125     # Set to 0 for darkest and 255 for brightest
+LED_BRIGHTNESS = 250     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 
 
@@ -138,6 +138,6 @@ if __name__ == '__main__':
             print state
         elif state == State.WAIT_FOR_NOCARD:
             greenTopOnly(strip)
-            glow(strip, 20, haltOnReset)
             thread.start_new_thread(resetAfterDelay, ())
+            glow(strip, 20, haltOnReset)
             print state
