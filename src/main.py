@@ -59,12 +59,12 @@ def glow(strip, wait_ms, didStateChange):
         time.sleep(wait_ms/1000.0)
         strip.show()
 
-def waitForNewline(callback):
+def waitForNewline(onCardRead):
     print "⌨️"
     with open('/dev/tty0', 'r') as tty:
         while True:
             tty.readline()
-            callback()
+            onCardRead()
 
 
 class State:
@@ -79,20 +79,21 @@ if __name__ == '__main__':
 
     print "🌈"
 
-    def callback():
+    def onCardRead():
         state = State.WAIT_FOR_KEYS
         green(strip)
         time.sleep(0.75)
 
-    thread.start_new_thread(waitForNewline, (callback,))
+    thread.start_new_thread(waitForNewline, (onCardRead,))
 
     while True:
         if state == State.WAIT_FOR_CARD:
             print "state is WAIT_FOR_CARD"
             blue(strip)
-            glow(strip, 20, lambda: state != State.WAIT_FOR_CARD)
+            glow(strip, 20, lambda: state == State.WAIT_FOR_KEYS)
         elif state == State.WAIT_FOR_KEYS:
             print "state is WAIT_FOR_KEYS"
             green(strip)
-            glow(strip, 20, lambda: state != State.WAIT_FOR_KEYS)
+            # glow(strip, 20, lambda: state == State.WAIT_FOR_CARD)
             state = State.WAIT_FOR_CARD
+            time.sleep(3)
