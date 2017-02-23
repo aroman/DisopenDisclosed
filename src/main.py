@@ -94,16 +94,17 @@ if __name__ == '__main__':
 
     print "🌈"
 
-
     def onCardRead():
         global state
-        state = State.WAIT_FOR_KEYS
-        print "Updating state to: " + state
+        if state == WAIT_FOR_CARD:
+            state = State.WAIT_FOR_KEYS
+            print "Updating state to: " + state
 
     def onButtonPressed():
         global state
-        state = State.WAIT_FOR_NOCARD
-        print "Updating state to: " + state
+        if state == WAIT_FOR_KEYS:
+            state = State.WAIT_FOR_NOCARD
+            print "Updating state to: " + state
 
     def haltOnKeyRead():
         global state
@@ -116,7 +117,7 @@ if __name__ == '__main__':
     def resetAfterDelay():
         time.sleep(5)
         global state
-        return state == State.WAIT_FOR_NOCARD
+        state = State.WAIT_FOR_CARD
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
     thread.start_new_thread(waitForButton, (onButtonPressed,))
@@ -126,12 +127,14 @@ if __name__ == '__main__':
         if state == State.WAIT_FOR_CARD:
             blueTopOnly(strip)
             glow(strip, 20, haltOnKeyRead)
+            print state
         elif state == State.WAIT_FOR_KEYS:
             greenBottomOnly(strip)
-            state = State.WAIT_FOR_CARD
             glow(strip, 20, haltOnButtonPressed)
             time.sleep(3)
+            print state
         elif state == State.WAIT_FOR_NOCARD:
             greenTopOnly(strip)
             glow(strip, 20, lambda: "")
             thread.start_new_thread(resetAfterDelay, ())
+            print state
