@@ -32,7 +32,7 @@ def setTopColor(strip, color, wait_ms=50):
         strip.setPixelColor(i, color)
     strip.show()
 
-def setBottomColor(strip, color, wait_ms=)
+def setBottomColor(strip, color):
     for i in range(TOP_PIXELS, BOTTOM_PIXELS):
         strip.setPixelColor(i, color)
     strip.show()
