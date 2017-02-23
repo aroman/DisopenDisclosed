@@ -49,11 +49,11 @@ def green(strip):
 
 def glow(strip, wait_ms=20):
     print "glowing"
-    for i in range(20, LED_BRIGHTNESS + 1):
+    for i in range(50, LED_BRIGHTNESS + 1):
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
-    for i in range(LED_BRIGHTNESS, 20 - 1, -1):
+    for i in range(LED_BRIGHTNESS, 50 - 1, -1):
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
@@ -77,11 +77,11 @@ if __name__ == '__main__':
     # try:
     while 1:
         try:
+            print "inner try"
             blue(strip)
             glow(strip)
             c = sys.stdin.read(1)
             if c != '\n': continue
-            # rainbow(strip)
             green(strip)
             time.sleep(0.75)
             blue(strip)
