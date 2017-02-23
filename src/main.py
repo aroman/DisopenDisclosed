@@ -4,6 +4,11 @@ import thread
 import time
 from neopixel import *
 import sys
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # LED strip configuration:
 LED_COUNT      = (4 + 2 + 3 + 2 + 4 + 4 + 4)      # Number of LED pixels.
@@ -63,6 +68,15 @@ def waitForNewline(onCardRead):
             tty.readline()
             onCardRead()
 
+def waitForButton(onButtonPressed):
+    print "🔘"
+    while True:
+        input_state = GPIO.input(23)
+        if input_state == False:
+            print('Button Pressed')
+            onButtonPressed()
+            time.sleep(0.1)
+
 class State:
     WAIT_FOR_CARD = 'WAIT_FOR_CARD'
     WAIT_FOR_KEYS = 'WAIT_FOR_KEYS'
@@ -81,12 +95,16 @@ if __name__ == '__main__':
         state = State.WAIT_FOR_KEYS
         print "Updating state to: " + state
 
+    def onButtonPressed():
+        global state
+        print "CALLBACK FOR BUTTON"
 
     def haltOnKeyRead():
         global state
         return state == State.WAIT_FOR_KEYS
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
+    thread.start_new_thread(waitForButton, (onButtonPressed,))
 
     while True:
         print state
@@ -96,5 +114,5 @@ if __name__ == '__main__':
         elif state == State.WAIT_FOR_KEYS:
             greenBottomOnly(strip)
             # glow(strip, 20, haltOnKeyRead)
-            state = State.WAIT_FOR_CARD
+            # state = State.WAIT_FOR_CARD
             time.sleep(3)
