@@ -79,7 +79,7 @@ if __name__ == '__main__':
             try:
                 print "inner try"
                 blue(strip)
-                glow(strip)
+                # glow(strip)
                 c = sys.stdin.read(1)
                 if c != '\n': continue
                 green(strip)
