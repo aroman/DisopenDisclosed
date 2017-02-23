@@ -46,14 +46,20 @@ def green(strip):
 #         strip.show()
 #         time.sleep(wait_ms/1000.0)
 
-def glow(strip, wait_ms, didStateChange):
+def glow(strip, wait_ms, shouldHalt):
+    
+    def haltIfNeeded():
+        if shouldHalt():
+            print "shoudlHalt() == True!"
+            return
+
     for i in range(70, LED_BRIGHTNESS + 1):
-        if didStateChange(): return
+        haltIfNeeded
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
     for i in range(LED_BRIGHTNESS, 70 - 1, -1):
-        if didStateChange(): return
+        haltIfNeeded
         strip.setBrightness(i)
         time.sleep(wait_ms/1000.0)
         strip.show()
@@ -88,12 +94,11 @@ if __name__ == '__main__':
     thread.start_new_thread(waitForNewline, (onCardRead,))
 
     while True:
+        print state
         if state == State.WAIT_FOR_CARD:
-            print state
             blue(strip)
             glow(strip, 20, haltWhenStateBecomes(State.WAIT_FOR_KEYS))
         elif state == State.WAIT_FOR_KEYS:
-            print state
             green(strip)
             # glow(strip, 20, lambda: state == State.WAIT_FOR_CARD)
             state = State.WAIT_FOR_CARD
