@@ -114,6 +114,10 @@ if __name__ == '__main__':
         global state
         return state == State.WAIT_FOR_NOCARD
 
+    def haltOnReset():
+        global state
+        return state == State.WAIT_FOR_CARD
+
     def resetAfterDelay():
         time.sleep(5)
         global state
@@ -134,6 +138,6 @@ if __name__ == '__main__':
             print state
         elif state == State.WAIT_FOR_NOCARD:
             greenTopOnly(strip)
-            glow(strip, 20, lambda: "")
+            glow(strip, 20, haltOnReset)
             thread.start_new_thread(resetAfterDelay, ())
             print state
