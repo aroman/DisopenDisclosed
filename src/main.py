@@ -89,9 +89,11 @@ if __name__ == '__main__':
         state = State.WAIT_FOR_KEYS
         print "Updating state to: " + state
 
-    def haltWhenStateBecomes(targetState):
+
+    def haltOnKeyRead():
         global state
-        return lambda: state == targetState
+        print "checking state, it's " + state
+        return state == targetState
 
     thread.start_new_thread(waitForNewline, (onCardRead,))
 
@@ -99,7 +101,7 @@ if __name__ == '__main__':
         print state
         if state == State.WAIT_FOR_CARD:
             blue(strip)
-            glow(strip, 20, haltWhenStateBecomes(State.WAIT_FOR_KEYS))
+            glow(strip, 20, haltOnKeyRead)
         elif state == State.WAIT_FOR_KEYS:
             green(strip)
             # glow(strip, 20, lambda: state == State.WAIT_FOR_CARD)
