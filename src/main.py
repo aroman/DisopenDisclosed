@@ -48,10 +48,10 @@ def green(strip):
 #         time.sleep(wait_ms/1000.0)
 
 def glow(strip, wait_ms=20):
-        for i in range(20, 200):
-            setBrightness(i)
-            time.sleep(wait_ms/1000.0)
-            strip.show()
+    for i in range(LED_BRIGHTNESS/15, LED_BRIGHTNESS):
+        setBrightness(i)
+        time.sleep(wait_ms/1000.0)
+        strip.show()
 
 if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
@@ -73,10 +73,14 @@ if __name__ == '__main__':
     while 1:
         try:
             blue(strip)
+            glow(strip)
             c = sys.stdin.read(1)
             if c != '\n': continue
             # rainbow(strip)
             green(strip)
+            time.sleep(0.75)
+            blue(strip)
+            glow(strip)
             time.sleep(0.75)
         except IOError:
             traceback.print_exc()
