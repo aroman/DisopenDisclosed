@@ -57,6 +57,10 @@ def blueBottomOnly(strip):
     setTopColor(strip, OffColor)
     setBottomColor(strip, BlueColor)
 
+def greenBoth(strip):
+    setTopColor(strip, GreenColor)
+    setBottomColor(strip, GreenColor)
+
 def glow(strip, wait_ms, shouldHalt):
     print "glow()"
     for i in range(70, LED_BRIGHTNESS + 1):
@@ -163,7 +167,7 @@ if __name__ == '__main__':
             glow(strip, 10, haltOnButtonPressed)
             print state
         elif state == State.WAIT_FOR_NOCARD:
-            greenTopOnly(strip)
+            greenBoth(strip)
             if not waitForResetThreadStarted:
                 thread.start_new_thread(resetAfterDelay, ())
                 waitForResetThreadStarted = True
