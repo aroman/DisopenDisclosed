@@ -45,6 +45,11 @@ def blueTopOnly(strip):
     setTopColor(strip, BlueColor)
     setBottomColor(strip, OffColor)
 
+
+def redTopOnly(strip):
+    setTopColor(strip, Color(189, 196, 167))
+    setBottomColor(strip, OffColor)
+
 def greenTopOnly(strip):
     setTopColor(strip, GreenColor)
     setBottomColor(strip, OffColor)
@@ -155,7 +160,7 @@ if __name__ == '__main__':
                 thread.start_new_thread(waitForNewline, (onCardRead,))
                 waitForNewlineThreadStarted = True
             waitForResetThreadStarted = False
-            blueTopOnly(strip)
+            redTopOnly(strip)
             glow(strip, 10, haltOnKeyRead)
             print state
         elif state == State.WAIT_FOR_KEYS:
